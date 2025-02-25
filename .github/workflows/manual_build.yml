@@ -1,0 +1,40 @@
+name: Manual Build
+
+on:
+  workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    arch: arm64
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: '6.2.4'
+        host: 'linux'
+        target: 'desktop'
+        arch: 'linux_gcc_arm64'
+        aqtversion: "==3.2.*"
+
+    - name: Configure CMake
+      run: |
+        mkdir build
+        cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Release
+      shell: bash
+
+    - name: Build
+      run: |
+        cd build
+        cmake --build . --config=Release
+      shell: bash
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: iconmanager_ubuntu_arm64
+        path: build/IconManager
