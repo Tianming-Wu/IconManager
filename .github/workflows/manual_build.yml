@@ -6,7 +6,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    arch: arm64
 
     steps:
     - name: Checkout code
@@ -15,7 +14,7 @@ jobs:
     - name: Set up Qt
       uses: jurplel/install-qt-action@v4
       with:
-        version: '6.2.4'
+        version: '6.2.*'
         host: 'linux'
         target: 'desktop'
         arch: 'linux_gcc_arm64'
@@ -31,6 +30,7 @@ jobs:
       run: |
         cd build
         cmake --build . --config=Release
+        ls
       shell: bash
 
     - name: Upload Artifact
